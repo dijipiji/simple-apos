@@ -1,0 +1,127 @@
+{# Automatically extends the right outer layout and also handles AJAX siutations #}
+{% extends data.outerLayout %}
+
+{% set title = data.piece.title or data.page.title %}
+{% block title %}
+  {{ title }}
+  {% if not title %}
+    {{ apos.log('Looks like you forgot to override the title block in a template that does not have access to an Apostrophe page or piece.') }}
+  {% endif %}
+{% endblock %}
+
+{% block extraHead %}
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+
+{% endblock %}
+
+
+{% block beforeMain %}
+<div class="bp-wrapper">
+  <header class="bp-header">
+
+    <nav id="desktop-menu">
+      <ul>
+        {% if not data.user %}
+          <li><a class="bp-button bp-header__login" href="/login">Login</a></li>
+        {% endif %}
+        <li><a href="/">Home</a></li>
+        {# 👇 Referencing the global doc `primaryNav` property #}
+        {% for item in data.global.primaryNav %}
+          <li>
+            {% set selectedClass = '' %}
+            {% set path = '' %}
+            {% set pageTitle = '' %}
+            {% if item.type === 'page' and item._page and item._page[0] %}
+              {% set path = item._page[0]._url %}
+              {% set pageTitle = item._page[0].title %}
+              {% if data.page.title === pageTitle %}
+                {% set selectedClass = 'selected' %}
+              {% else %}
+                {% set selectedClass = 'unselected' %}
+              {% endif %}
+            {% elif item.type === 'custom' %}
+              {% set path = item.customUrl %}
+            {% endif %}
+            <a href="{{ path }}" class="{{ selectedClass }}"
+              {% if item.target[0] === '_blank' %} target="_blank" {% endif %}
+            >{{ item.label or pageTitle }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+
+    <div id="mobile-menu">
+        <button class="sidemenu__btn" v-on:click="navOpen=!navOpen" v-bind:class="{active:navOpen}">
+            <span class="top"></span>
+            <span class="mid"></span>
+            <span class="bottom"></span>
+        </button>
+        <transition name="translateX">
+          <nav v-show="navOpen">
+            <div class="sidemenu__wrapper">
+
+              <ul class="sidemenu__list">
+                {% if not data.user %}
+                  <li><a class="bp-button bp-header__login" href="/login">Login</a></li>
+                {% endif %}
+                <li><a href="/">Home</a></li>
+                {# 👇 Referencing the global doc `primaryNav` property #}
+                {% for item in data.global.primaryNav %}
+                  <li class="sidemenu__item">
+                    {% set selectedClass = '' %}
+                    {% set path = '' %}
+                    {% set pageTitle = '' %}
+                    {% if item.type === 'page' and item._page and item._page[0] %}
+                      {% set path = item._page[0]._url %}
+                      {% set pageTitle = item._page[0].title %}
+                      {% if data.page.title === pageTitle %}
+                        {% set selectedClass = 'selected' %}
+                      {% else %}
+                        {% set selectedClass = 'unselected' %}
+                      {% endif %}
+                    {% elif item.type === 'custom' %}
+                      {% set path = item.customUrl %}
+                    {% endif %}
+                    <a href="{{ path }}" class="{{ selectedClass }}"
+                      {% if item.target[0] === '_blank' %} target="_blank" {% endif %}
+                    >{{ item.label or pageTitle }}</a>
+                  </li>
+                {% endfor %}
+
+              </ul>
+
+            </div>
+          </nav>
+        </transition>
+    </div>
+
+    <script type="text/javascript">
+      var sidemenu = new Vue({
+        el: '#mobile-menu',
+        data: {
+          navOpen: false,
+        },
+      })
+    </script>
+
+  </header>
+  <main class="bp-main">
+{% endblock %}
+
+{% block main %}
+  {#
+    Usually, your page templates in the @apostrophecms/pages module will override
+    this block. It is safe to assume this is where your page-specific content
+    should go.
+  #}
+{% endblock %}
+
+{% block afterMain %}
+  </main>
+  <footer class="bp-footer">
+  </footer>
+</div>{# Close .bp-wrapper #}
+{% endblock %}
+

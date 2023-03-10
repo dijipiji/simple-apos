@@ -1,0 +1,245 @@
+// Use flex to keep the footer at the bottom.
+body,
+[data-apos-refreshable],
+.bp-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-apos-refreshable],
+.bp-wrapper,
+main {
+  flex-grow: 1;
+}
+
+body {
+  min-height: 100vh;
+  // Nice system fonts.
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.bp-header,
+main,
+.bp-footer {
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  padding: 40px 0;
+}
+
+.bp-footer {
+  padding: 40px 0;
+}
+
+.bp-footer__links {
+  padding-left: 0px;
+  list-style: none;
+  text-align: center;
+
+  li {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  li:last-child { margin-right: 0; }
+}
+
+.bp-header__logo {
+  display: block;
+  width: 190px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.bp-header__login {
+
+  &:visited {
+    color: white;
+  }
+}
+
+.bp-content {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+
+
+/* Header navigation */
+
+// Desktop nav
+#desktop-menu {
+  width:calc(100% - 290px);
+  margin-left:100px;
+}
+
+#desktop-menu ul {
+  margin:0;
+  padding:0;
+  display:flex;
+  justify-content:left;
+  align-content:space-between;
+  list-style-type: none;
+}
+
+#desktop-menu li {
+  margin: 0 20px;
+}
+
+#desktop-menu ul li a {
+  padding:10px;
+}
+
+#desktop-menu ul li a.selected {
+  background-color: $color-green;
+  color:#fff !important;
+  border-radius:5px;
+}
+
+// Mobile nav
+#mobile-menu {
+
+  display:none;
+
+  // this is the main panel
+  nav {
+    width: 200px;
+    background: #222;
+    position: fixed;
+    top: 30px;
+    right: 20px;
+    z-index: 99;
+    border:1px solid white;
+    text-align: right;
+  }
+
+  // the menu icon / x box
+  .sidemenu {
+    &__btn {
+      display: block;
+      width: 50px;
+      height: 50px;
+      background: $color-purple;
+      border:0;
+      position: fixed;
+      top:30px;
+      right:20px;
+      z-index: 100;
+      appearance: none;
+      cursor: pointer;
+      outline: none;
+
+      span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        margin: auto;
+        background: #fff;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        transition: all .4s ease;
+
+        &.top {
+          transform: translateY(-8px);
+        }
+
+        &.bottom {
+          transform: translateY(8px);
+        }
+      }
+      &.active{
+        .top {
+          transform: rotate(-45deg);
+        }
+        .mid{
+          transform: translateX(-20px) rotate(360deg);
+          opacity: 0;
+        }
+        .bottom {
+          transform: rotate(45deg);
+        }
+      }
+
+    }
+
+    &__wrapper {
+      padding-top: 50px;
+    }
+
+    &__list {
+      padding-top: 50px;
+      list-style:none;
+      padding: 0;
+      margin: 0;
+    }
+
+    &__item {
+      a {
+        text-decoration: none;
+        line-height: 1.6em;
+        font-size: 1.6em;
+        padding: .5em;
+        display: block;
+        color: white;
+        transition: .4s ease;
+
+        &:hover {
+          background: $color-green;
+        }
+      }
+    }
+  }
+}
+
+.translateX-enter{
+  transform:translateX(+200px);
+  opacity: 0;
+}
+
+.translateX-enter-active,.translateX-leave-active{
+  transform-origin: top 20px 0;
+  transition:.2s ease;
+}
+
+.translateX-leave-to{
+  transform: translateX(+200px);
+  opacity: 0;
+}
+
+
+
+/* < Tablet landscape */
+@media all and (max-width : 1023px) {
+
+  /* this is probably just for the pre-release landing page
+  & should be removed for launch */
+  .bp-wrapper {
+    margin:20px;
+  }
+
+  #desktop-menu {
+    display:none;
+  }
+
+  #mobile-menu {
+    display:block;
+  }
+
+
+}
+
+
